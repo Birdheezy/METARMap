@@ -1,5 +1,7 @@
 # METARMap
 
+These are the original instructions taken from prueker's project. These will be updated in the near future with a more comprehensive set of setup instructions for beginners. 
+
 Raspberry Pi project to visualize flight conditions on a map using WS8211 LEDs addressed via NeoPixel
 
 ## Detailed instructions

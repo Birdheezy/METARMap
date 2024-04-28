@@ -2,6 +2,8 @@ Version 1.0!
 
 This is my version 1.0 based on prueker's METARMap project https://github.com/prueker/METARMap
 
+The code still needs a bit of clean up as I work on other enhancements. Please stick with me! 
+
 All changes I've made have built on his core code. While much has changed, the core of the weather fetching code is unchanged.
 I've changed "wx_string" to "precip" as I found that to be a more accurate description.
 

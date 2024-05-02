@@ -19,7 +19,7 @@ COLOR_CLEAR = [0, 0, 0]
 COLOR_LIGHTNING = [255, 255, 255]
 
 #--------Animation Parameters--------
-dim_brightness = 0.1			# Brightness of LEDs after sunset if ACTIVATE_DAYTIME_DIMMING is True
+dim_brightness = 0..05			# Brightness the LEDs will dim to when doing the windy animation
 threshold_wind_speed = 15		# Airports with wind speed above this value will animate for wind
 windy_animation_dim_pause = 1.5	# Time LED's should stay dim before going bright again
 wind_fade_time = 0.5			# Speed of LED fade for wind animation

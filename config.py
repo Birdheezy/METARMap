@@ -4,27 +4,28 @@ import board
 
 # --------NeoPixel configuration--------
 LED_ORDER = neopixel.GRB
-LED_COUNT = 30				# Set to the number of LEDs in your installation
-LED_PIN = board.D18	  		# Pin used for data for the LEDs
-LED_BRIGHTNESS = 0.7  		# Default/daytime brightness
-LIGHTNING_BRIGHTNESS = 0.7	# Brightness when flashing white
+LED_COUNT = 50				# Set to the number of LEDs in your installation
+LED_PIN = board.D18  		# Pin used for data for the LEDs
+LED_BRIGHTNESS = .6  		# Default/daytime brightness. Value between 0 and 1
+LIGHTNING_BRIGHTNESS = 0.7	# Brightness when flashing white for lightning animation. Change in def lightning_animation(leds):
 
 #--------LED colors--------
-COLOR_VFR = [255, 0, 0]
-COLOR_MVFR = [0, 0, 255]
-COLOR_IFR = [0, 255, 0]
-COLOR_LIFR = [0, 125, 125]
-COLOR_SNOW = [125, 125, 0]
-COLOR_CLEAR = [0, 0, 0]
-COLOR_LIGHTNING = [255, 255, 255]
+COLOR_VFR = [255, 0, 0]				#Green
+COLOR_MVFR = [0, 0, 255]			#Blue
+COLOR_IFR = [0, 255, 0]				#Red
+COLOR_LIFR = [0, 125, 125]			#Magenta
+COLOR_SNOW = [125, 125, 0]			#Yellow
+COLOR_CLEAR = [0, 0, 0]				#Off
+COLOR_LIGHTNING = [255, 255, 255]	#White
+COLOR_WINDY = [10, 0, 0]			#Dim Green for windy
 
 #--------Animation Parameters--------
-dim_brightness = 0..05			# Brightness the LEDs will dim to when doing the windy animation
+dim_brightness = 0.05			# Brightness the LEDs will dim to when doing the windy animation
 threshold_wind_speed = 15		# Airports with wind speed above this value will animate for wind
-windy_animation_dim_pause = 1.5	# Time LED's should stay dim before going bright again
+windy_animation_dim_pause = 1.3	# Time LED's should stay dim before going bright again
 wind_fade_time = 0.5			# Speed of LED fade for wind animation
 num_steps = 100					# Amount of steps for dimming animation
-animation_pause = 15			# Time between animation sets
+animation_pause = 10			# Time between animation sets
 lightning_flash_speed = 0.1		# Speed of LED blinking for lightning
 snow_fade_time = 0.3			# Snow animation speed
 
@@ -36,14 +37,14 @@ ACTIVATE_DAYTIME_DIMMING = True		# Turn LED dim time of day on or off
 
 #--------Location and time-based settings--------
 LOCATION = "Denver"							# Major city location. Visit https://astral.readthedocs.io/en/latest/index.html, scroll down to "cities" to find the cloest one to you
-LED_BRIGHTNESS_DIM	= .2					# Led brightness after sunset or DIM_TIME_START
+LED_BRIGHTNESS_DIM = .2						# Led brightness after sunset or DIM_TIME_START
 USE_SUNRISE_SUNSET = True					# Use sunrise or sunset times for LED dimming
-BRIGHT_TIME_START = datetime.time(7, 0)		# Custom time to set LEDs to bright
-DIM_TIME_START = datetime.time(19, 0)		# Custom time to set LEDs to dim
+BRIGHT_TIME_START = datetime.time(7, 0)		# Custom time to set LEDs to be bright
+DIM_TIME_START = datetime.time(20, 30)		# Custom time to set LEDs to dim
 
 #--------Legend Settings--------
-SHOW_LEGEND = False		# Use LEDs to show legend of VFR, MVFR, IFR, and LIFR
-OFFSET_LEGEND_BY = 0	# How many LEDs to skip before starting the legend
+SHOW_LEGEND = True				# Use LEDs to show legend of VFR, MVFR, IFR, and LIFR
+#OFFSET_LEGEND_BY = 1			# How many LEDs to skip before starting the legend
 
 def flt_cat_color(flight_category, brightness):
 	if flight_category == "VFR":

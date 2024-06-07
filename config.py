@@ -8,7 +8,7 @@ LED_COUNT = 50				# Set to the number of LEDs in your installation
 LED_PIN = board.D18  		# Pin used for data for the LEDs
 LED_BRIGHTNESS = .6  		# Default/daytime brightness. Value between 0 and 1
 LIGHTNING_BRIGHTNESS = 0.7	# Brightness when flashing white for lightning animation. Change in def lightning_animation(leds):
-
+ACTIVATE_EXTERNAL_METAR_DISPLAY = False
 #--------LED colors--------
 COLOR_VFR = [255, 0, 0]				#Green
 COLOR_MVFR = [0, 0, 255]			#Blue

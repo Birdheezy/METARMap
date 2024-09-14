@@ -32,6 +32,7 @@ def index():
     error_message = None
     if request.method == 'POST':
         if 'update' in request.form:
+
             led_brightness, error_message_led = validate_float_field('LED_BRIGHTNESS', 0.01, 1.0, config.LED_BRIGHTNESS)
             led_brightness_dim, error_message_dim = validate_float_field('LED_BRIGHTNESS_DIM', 0.01, 1.0, config.LED_BRIGHTNESS_DIM)
             dim_brightness, error_message_dim_brightness = validate_float_field('dim_brightness', 0.01, 1.0, config.dim_brightness)
@@ -57,8 +58,12 @@ def index():
             snow_animation = request.form.get('SNOW_ANIMATION') == 'on'
             activate_daytime_dimming = request.form.get('ACTIVATE_DAYTIME_DIMMING') == 'on'
             led_brightness_dim = request.form['LED_BRIGHTNESS_DIM']
-            
             show_legend = request.form.get('SHOW_LEGEND') == 'on'
+
+            bright_hour = int(request.form['BRIGHT_HOUR'])
+            bright_minute = int(request.form['BRIGHT_MINUTE'])
+            dim_hour = int(request.form['DIM_HOUR'])
+            dim_minute = int(request.form['DIM_MINUTE'])
 
             # Read the existing config file
             with open('config.py', 'r') as f:
@@ -67,7 +72,11 @@ def index():
             # Update the specific settings
             new_lines = []
             for line in lines:
-                if line.strip().startswith('LED_BRIGHTNESS ='):
+                if line.strip().startswith('BRIGHT_TIME_START ='):
+                    new_lines.append(f"BRIGHT_TIME_START = datetime.time({bright_hour}, {bright_minute})\n")
+                elif line.strip().startswith('DIM_TIME_START ='):
+                    new_lines.append(f"DIM_TIME_START = datetime.time({dim_hour}, {dim_minute})\n")
+                elif line.strip().startswith('LED_BRIGHTNESS ='):
                     new_lines.append(f"LED_BRIGHTNESS = {led_brightness}\n")
                 elif line.strip().startswith('LED_BRIGHTNESS_DIM ='):
                     new_lines.append(f"LED_BRIGHTNESS_DIM = {led_brightness_dim}\n")
@@ -103,7 +112,7 @@ def index():
                     new_lines.append(f"LED_BRIGHTNESS_DIM = {led_brightness_dim}\n")
                 elif line.startswith('SHOW_LEGEND'):
                     new_lines.append(f"SHOW_LEGEND = {show_legend}\n")
-
+                
 
                 else:
                     new_lines.append(line)
@@ -131,6 +140,26 @@ def index():
             <div class="container">
                 <h1>Settings</h1>
                 <form method="post">
+                    <div class="form-group">
+                        <label for="WIND_ANIMATION" title="Turn wind animation on or off">Wind Animation:</label>
+                        <input type="checkbox" id="WIND_ANIMATION" name="WIND_ANIMATION" {% if WIND_ANIMATION %}checked{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="LIGHTNING_ANIMATION" title="Turn lightning animation on or off">Lightning Animation:</label>
+                        <input type="checkbox" id="LIGHTNING_ANIMATION" name="LIGHTNING_ANIMATION" {% if LIGHTNING_ANIMATION %}checked{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="SNOW_ANIMATION" title="Turn snow animation on or off">Snow Animation:</label>
+                        <input type="checkbox" id="SNOW_ANIMATION" name="SNOW_ANIMATION" {% if SNOW_ANIMATION %}checked{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="ACTIVATE_DAYTIME_DIMMING" title="Turn LED dim time of day on or off">Activate Daytime Dimming:</label>
+                        <input type="checkbox" id="ACTIVATE_DAYTIME_DIMMING" name="ACTIVATE_DAYTIME_DIMMING" {% if ACTIVATE_DAYTIME_DIMMING %}checked{% endif %}>
+                    </div>
+                    <div class="form-group">
+                        <label for="snow_fade_time" title="Snow animation speed">Snow Fade Time:</label>
+                        <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}">
+                    </div>
                     <div class="form-group">
                         <label for="LED_BRIGHTNESS" title="Default/daytime brightness. Value between 0 and 1">LED Brightness:</label>
                         <input type="text" id="LED_BRIGHTNESS" name="LED_BRIGHTNESS" value="{{ LED_BRIGHTNESS }}">
@@ -171,26 +200,7 @@ def index():
                         <label for="lightning_flash_speed" title="Speed of LED blinking for lightning">Lightning Flash Speed:</label>
                         <input type="text" id="lightning_flash_speed" name="lightning_flash_speed" value="{{ lightning_flash_speed }}">
                     </div>
-                    <div class="form-group">
-                        <label for="snow_fade_time" title="Snow animation speed">Snow Fade Time:</label>
-                        <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="WIND_ANIMATION" title="Turn wind animation on or off">Wind Animation:</label>
-                        <input type="checkbox" id="WIND_ANIMATION" name="WIND_ANIMATION" {% if WIND_ANIMATION %}checked{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="LIGHTNING_ANIMATION" title="Turn lightning animation on or off">Lightning Animation:</label>
-                        <input type="checkbox" id="LIGHTNING_ANIMATION" name="LIGHTNING_ANIMATION" {% if LIGHTNING_ANIMATION %}checked{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="SNOW_ANIMATION" title="Turn snow animation on or off">Snow Animation:</label>
-                        <input type="checkbox" id="SNOW_ANIMATION" name="SNOW_ANIMATION" {% if SNOW_ANIMATION %}checked{% endif %}>
-                    </div>
-                    <div class="form-group">
-                        <label for="ACTIVATE_DAYTIME_DIMMING" title="Turn LED dim time of day on or off">Activate Daytime Dimming:</label>
-                        <input type="checkbox" id="ACTIVATE_DAYTIME_DIMMING" name="ACTIVATE_DAYTIME_DIMMING" {% if ACTIVATE_DAYTIME_DIMMING %}checked{% endif %}>
-                    </div>
+                    
                     <div class="form-group">
                         <label for="LED_BRIGHTNESS_DIM" title="LED brightness after sunset or DIM_TIME_START">LED Brightness Dim:</label>
                         <input type="text" id="LED_BRIGHTNESS_DIM" name="LED_BRIGHTNESS_DIM" value="{{ LED_BRIGHTNESS_DIM }}">
@@ -199,6 +209,39 @@ def index():
                         <label for="SHOW_LEGEND" title="Use LEDs to show legend of VFR, MVFR, IFR, and LIFR">Show Legend:</label>
                         <input type="checkbox" id="SHOW_LEGEND" name="SHOW_LEGEND" {% if SHOW_LEGEND %}checked{% endif %}>
                     </div>
+
+                    <!-- Bright Time Start -->
+                    <div class="form-group">
+                        <label for="BRIGHT_HOUR">Bright Time Start - Hour:</label>
+                        <select id="BRIGHT_HOUR" name="BRIGHT_HOUR">
+                            {% for hour in range(24) %}
+                                <option value="{{ hour }}" {% if hour == BRIGHT_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="BRIGHT_MINUTE">Minute:</label>
+                        <select id="BRIGHT_MINUTE" name="BRIGHT_MINUTE">
+                            {% for minute in range(0, 60, 5) %}
+                                <option value="{{ minute }}" {% if minute == BRIGHT_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- Dim Time Start -->
+                    <div class="form-group">
+                        <label for="DIM_HOUR">Dim Time Start - Hour:</label>
+                        <select id="DIM_HOUR" name="DIM_HOUR">
+                            {% for hour in range(24) %}
+                                <option value="{{ hour }}" {% if hour == DIM_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="DIM_MINUTE">Minute:</label>
+                        <select id="DIM_MINUTE" name="DIM_MINUTE">
+                            {% for minute in range(0, 60, 5) %}
+                                <option value="{{ minute }}" {% if minute == DIM_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
                     <input type="submit" name="update" value="Update">
                     <input type="submit" name="refresh" value="Refresh">
                 </form>
@@ -208,6 +251,7 @@ def index():
             </div>
         </body>
         </html>
-    ''', LED_BRIGHTNESS=config.LED_BRIGHTNESS, LOCATION=config.LOCATION, LED_COUNT=config.LED_COUNT, LIGHTNING_BRIGHTNESS=config.LIGHTNING_BRIGHTNESS, dim_brightness=config.dim_brightness, threshold_wind_speed=config.threshold_wind_speed, windy_animation_dim_pause=config.windy_animation_dim_pause, wind_fade_time=config.wind_fade_time, animation_pause=config.animation_pause, lightning_flash_speed=config.lightning_flash_speed, snow_fade_time=config.snow_fade_time, WIND_ANIMATION=config.WIND_ANIMATION, LIGHTNING_ANIMATION=config.LIGHTNING_ANIMATION, SNOW_ANIMATION=config.SNOW_ANIMATION, ACTIVATE_DAYTIME_DIMMING=config.ACTIVATE_DAYTIME_DIMMING, LED_BRIGHTNESS_DIM=config.LED_BRIGHTNESS_DIM, BRIGHT_TIME_START=config.BRIGHT_TIME_START, DIM_TIME_START=config.DIM_TIME_START, SHOW_LEGEND=config.SHOW_LEGEND, error_message=error_message)
+''', LED_BRIGHTNESS=config.LED_BRIGHTNESS, LOCATION=config.LOCATION, LED_COUNT=config.LED_COUNT, LIGHTNING_BRIGHTNESS=config.LIGHTNING_BRIGHTNESS, dim_brightness=config.dim_brightness, threshold_wind_speed=config.threshold_wind_speed, windy_animation_dim_pause=config.windy_animation_dim_pause, wind_fade_time=config.wind_fade_time, animation_pause=config.animation_pause, lightning_flash_speed=config.lightning_flash_speed, snow_fade_time=config.snow_fade_time, WIND_ANIMATION=config.WIND_ANIMATION, LIGHTNING_ANIMATION=config.LIGHTNING_ANIMATION, SNOW_ANIMATION=config.SNOW_ANIMATION, ACTIVATE_DAYTIME_DIMMING=config.ACTIVATE_DAYTIME_DIMMING, LED_BRIGHTNESS_DIM=config.LED_BRIGHTNESS_DIM, BRIGHT_TIME_START=config.BRIGHT_TIME_START, DIM_TIME_START=config.DIM_TIME_START, SHOW_LEGEND=config.SHOW_LEGEND, error_message=error_message)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

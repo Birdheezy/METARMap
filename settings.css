@@ -9,10 +9,9 @@ body {
     padding: 10px 0 0 0; /* Add padding to the top */
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Change from center to flex-start */
+    align-items: center; /* Change from center to flex-start */
     min-height: 100vh; /* Ensure the body takes at least the full viewport height */
 }
-
 
 .container {
     background-color: #1e1e1e;
@@ -20,9 +19,11 @@ body {
     padding-top: 10px; /* Add padding to the top */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    width: 300px; /* Adjust this width as needed */
-    margin-top: 20px; /* Add margin to the top */
-    justify-content: center;
+    width: 350px; /* Adjust this width as needed */
+    margin: 20px auto; /* Center the container horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the form inside the container */
 }
 
 
@@ -50,25 +51,11 @@ form {
 }
 
 label {
-    margin-right: 10px;
+/*    margin-right: 10px; */
     margin-bottom: 5px;
     color: #b0b0b0;
-    font-weight: 500;
-}
-
-input[type="submit"] {
-    padding: 10px;
-    background-color: #005dc0;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
     font-weight: bold;
-    width: 100%; /* Add this line to make submit buttons the same width */
-    box-sizing: border-box; /* Ensure padding and border are included in the width */
 }
-
-
 
 input[type="text"], select {
     padding: 10px;
@@ -77,14 +64,14 @@ input[type="text"], select {
     border-radius: 4px;
     background-color: #2c2c2c;
     color: #e0e0e0;
-    width: 100%; /* Ensure all input fields take up the full width of their container */
+    width: 75%; /* Ensure all input fields take up the full width of their container */
     box-sizing: border-box; /* Include padding and border in the element's total width */
 }
 
 
 input[type="submit"] {
     padding: 10px;
-    background-color: #005dc0;
+    background-color: #004896;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -96,11 +83,7 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #004bb5;
-}
-
-input[type="submit"]:hover {
-    background-color: #004bb5;
+    background-color: #00275e;
 }
 
 .error {

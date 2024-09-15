@@ -36,13 +36,14 @@ def index():
             led_brightness, error_message_led = validate_float_field('LED_BRIGHTNESS', 0.01, 1.0, config.LED_BRIGHTNESS)
             led_brightness_dim, error_message_dim = validate_float_field('LED_BRIGHTNESS_DIM', 0.01, 1.0, config.LED_BRIGHTNESS_DIM)
             dim_brightness, error_message_dim_brightness = validate_float_field('dim_brightness', 0.01, 1.0, config.dim_brightness)
-
+            lightning_brightness, error_message_lightning = validate_float_field('LIGHTNING_BRIGHTNESS', 0.01, 1.0, config.LIGHTNING_BRIGHTNESS)
+            
             # Combine error messages if needed
-            error_messages = [error_message_led, error_message_dim, error_message_dim_brightness]
+            error_messages = [error_message_led, error_message_dim, error_message_dim_brightness, error_message_lightning]
             error_message = " ".join([msg for msg in error_messages if msg])
             # Combine error messages if needed
-            error_messages = [error_message_led, error_message_dim, error_message_dim_brightness]
-            error_message = " ".join([msg for msg in error_messages if msg])
+            #error_messages = [error_message_led, error_message_dim, error_message_dim_brightness]
+            #error_message = " ".join([msg for msg in error_messages if msg])
             # Validate other settings
             led_count = request.form['LED_COUNT']
             lightning_brightness = request.form['LIGHTNING_BRIGHTNESS']
@@ -112,8 +113,6 @@ def index():
                     new_lines.append(f"LED_BRIGHTNESS_DIM = {led_brightness_dim}\n")
                 elif line.startswith('SHOW_LEGEND'):
                     new_lines.append(f"SHOW_LEGEND = {show_legend}\n")
-                
-
                 else:
                     new_lines.append(line)
 
@@ -139,110 +138,116 @@ def index():
         <body>
             <div class="container">
                 <h1>Settings</h1>
-                <form method="post">
+                <form method="post"><!-- check boxes -->                          
                     <div class="form-group">
-                        <label for="WIND_ANIMATION" title="Turn wind animation on or off">Wind Animation:</label>
+                        <label for="WIND_ANIMATION" title="Turn wind animation on or off">Wind Animation</label>
                         <input type="checkbox" id="WIND_ANIMATION" name="WIND_ANIMATION" {% if WIND_ANIMATION %}checked{% endif %}>
                     </div>
                     <div class="form-group">
-                        <label for="LIGHTNING_ANIMATION" title="Turn lightning animation on or off">Lightning Animation:</label>
+                        <label for="LIGHTNING_ANIMATION" title="Turn lightning animation on or off">Lightning Animation</label>
                         <input type="checkbox" id="LIGHTNING_ANIMATION" name="LIGHTNING_ANIMATION" {% if LIGHTNING_ANIMATION %}checked{% endif %}>
                     </div>
                     <div class="form-group">
-                        <label for="SNOW_ANIMATION" title="Turn snow animation on or off">Snow Animation:</label>
+                        <label for="SNOW_ANIMATION" title="Turn snow animation on or off">Snow Animation</label>
                         <input type="checkbox" id="SNOW_ANIMATION" name="SNOW_ANIMATION" {% if SNOW_ANIMATION %}checked{% endif %}>
                     </div>
                     <div class="form-group">
-                        <label for="ACTIVATE_DAYTIME_DIMMING" title="Turn LED dim time of day on or off">Activate Daytime Dimming:</label>
+                        <label for="ACTIVATE_DAYTIME_DIMMING" title="Turn LED dim time of day on or off">Activate Daytime Dimming</label>
                         <input type="checkbox" id="ACTIVATE_DAYTIME_DIMMING" name="ACTIVATE_DAYTIME_DIMMING" {% if ACTIVATE_DAYTIME_DIMMING %}checked{% endif %}>
                     </div>
                     <div class="form-group">
-                        <label for="snow_fade_time" title="Snow animation speed">Snow Fade Time:</label>
-                        <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}">
+                        <label for="SHOW_LEGEND" title="Use LEDs to show legend of VFR, MVFR, IFR, and LIFR">Show Legend</label>
+                        <input type="checkbox" id="SHOW_LEGEND" name="SHOW_LEGEND" {% if SHOW_LEGEND %}checked{% endif %}>
                     </div>
+                                  
+<!-- other settings -->
                     <div class="form-group">
-                        <label for="LED_BRIGHTNESS" title="Default/daytime brightness. Value between 0 and 1">LED Brightness:</label>
+                        <label for="LED_BRIGHTNESS" title="Default/daytime brightness. Value between 0 and 1">LED Brightness</label>
                         <input type="text" id="LED_BRIGHTNESS" name="LED_BRIGHTNESS" value="{{ LED_BRIGHTNESS }}">
                     </div>
                     <div class="form-group">
-                        <label for="LOCATION" title="Major city location. Visit https://astral.readthedocs.io/en/latest/index.html, scroll down to 'cities' to find the closest one to you">Location:</label>
-                        <input type="text" id="LOCATION" name="LOCATION" value="{{ LOCATION }}">
-                    </div>
+                        <label for="LED_BRIGHTNESS_DIM" title="LED brightness after sunset or DIM_TIME_START">Night Time Brightness</label>
+                        <input type="text" id="LED_BRIGHTNESS_DIM" name="LED_BRIGHTNESS_DIM" value="{{ LED_BRIGHTNESS_DIM }}">
+                    </div>                                  
                     <div class="form-group">
-                        <label for="LED_COUNT" title="Set to the number of LEDs in your installation">LED Count:</label>
-                        <input type="text" id="LED_COUNT" name="LED_COUNT" value="{{ LED_COUNT }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="LIGHTNING_BRIGHTNESS" title="Brightness when flashing white for lightning animation">Lightning Brightness:</label>
-                        <input type="text" id="LIGHTNING_BRIGHTNESS" name="LIGHTNING_BRIGHTNESS" value="{{ LIGHTNING_BRIGHTNESS }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="dim_brightness" title="Brightness the LEDs will dim to when doing the windy animation">Dim Brightness:</label>
+                        <label for="dim_brightness" title="Brightness the LEDs will dim to when doing the windy animation">Windy Dim Brightness</label>
                         <input type="text" id="dim_brightness" name="dim_brightness" value="{{ dim_brightness }}">
                     </div>
                     <div class="form-group">
-                        <label for="threshold_wind_speed" title="Airports with wind speed above this value will animate for wind">Threshold Wind Speed:</label>
+                        <label for="snow_fade_time" title="Snow animation speed">Snow Animation Fade Time</label>
+                        <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LOCATION" title="Major city location. Visit https://astral.readthedocs.io/en/latest/index.html, scroll down to 'cities' to find the closest one to you">Location</label>
+                        <input type="text" id="LOCATION" name="LOCATION" value="{{ LOCATION }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="LED_COUNT" title="Set to the number of LEDs in your installation">LED Count</label>
+                        <input type="text" id="LED_COUNT" name="LED_COUNT" value="{{ LED_COUNT }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="LIGHTNING_BRIGHTNESS" title="Brightness when flashing white for lightning animation">Lightning Brightness</label>
+                        <input type="text" id="LIGHTNING_BRIGHTNESS" name="LIGHTNING_BRIGHTNESS" value="{{ LIGHTNING_BRIGHTNESS }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="threshold_wind_speed" title="Airports with wind speed above this value will animate for wind">Wind Threshold Speed</label>
                         <input type="text" id="threshold_wind_speed" name="threshold_wind_speed" value="{{ threshold_wind_speed }}">
                     </div>
                     <div class="form-group">
-                        <label for="windy_animation_dim_pause" title="Time LED's should stay dim before going bright again">Windy Animation Dim Pause:</label>
-                        <input type="text" id="windy_animation_dim_pause" name="windy_animation_dim_pause" value="{{ windy_animation_dim_pause }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="wind_fade_time" title="Speed of LED fade for wind animation">Fade Animation Speed</label>
+                        <label for="wind_fade_time" title="Speed of LED fade for wind animation">Fade Animation Speed (Seconds)</label>
                         <input type="text" id="wind_fade_time" name="wind_fade_time" value="{{ wind_fade_time }}">
                     </div>
                     <div class="form-group">
-                        <label for="animation_pause" title="Time between animation sets">Animation Pause:</label>
+                        <label for="windy_animation_dim_pause" title="Time LED's should stay dim before going bright again">Windy Animation Dim Pause</label>
+                        <input type="text" id="windy_animation_dim_pause" name="windy_animation_dim_pause" value="{{ windy_animation_dim_pause }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="animation_pause" title="Time between animation sets">Animation Pause</label>
                         <input type="text" id="animation_pause" name="animation_pause" value="{{ animation_pause }}">
                     </div>
                     <div class="form-group">
-                        <label for="lightning_flash_speed" title="Speed of LED blinking for lightning">Lightning Flash Speed:</label>
+                        <label for="lightning_flash_speed" title="Speed of LED blinking for lightning">Lightning Flash Speed</label>
                         <input type="text" id="lightning_flash_speed" name="lightning_flash_speed" value="{{ lightning_flash_speed }}">
                     </div>
                     
-                    <div class="form-group">
-                        <label for="LED_BRIGHTNESS_DIM" title="LED brightness after sunset or DIM_TIME_START">LED Brightness Dim:</label>
-                        <input type="text" id="LED_BRIGHTNESS_DIM" name="LED_BRIGHTNESS_DIM" value="{{ LED_BRIGHTNESS_DIM }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="SHOW_LEGEND" title="Use LEDs to show legend of VFR, MVFR, IFR, and LIFR">Show Legend:</label>
-                        <input type="checkbox" id="SHOW_LEGEND" name="SHOW_LEGEND" {% if SHOW_LEGEND %}checked{% endif %}>
-                    </div>
 
                     <!-- Bright Time Start -->
                     <div class="form-group">
-                        <label for="BRIGHT_HOUR">Bright Time Start - Hour:</label>
+                        <label for="BRIGHT_HOUR">Bright Time Start - Hour</label>
                         <select id="BRIGHT_HOUR" name="BRIGHT_HOUR">
                             {% for hour in range(24) %}
                                 <option value="{{ hour }}" {% if hour == BRIGHT_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
                             {% endfor %}
                         </select>
-                        <label for="BRIGHT_MINUTE">Minute:</label>
+                        <label for="BRIGHT_MINUTE">Minute</label>
                         <select id="BRIGHT_MINUTE" name="BRIGHT_MINUTE">
-                            {% for minute in range(0, 60, 5) %}
-                                <option value="{{ minute }}" {% if minute == BRIGHT_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
-                            {% endfor %}
+                            <option value="00" {% if 00 == BRIGHT_TIME_START.minute %}selected{% endif %}>00</option>
+                            <option value="15" {% if 15 == BRIGHT_TIME_START.minute %}selected{% endif %}>15</option>
+                            <option value="30" {% if 30 == BRIGHT_TIME_START.minute %}selected{% endif %}>30</option>
+                            <option value="45" {% if 45 == BRIGHT_TIME_START.minute %}selected{% endif %}>45</option>
                         </select>
                     </div>
 
                     <!-- Dim Time Start -->
                     <div class="form-group">
-                        <label for="DIM_HOUR">Dim Time Start - Hour:</label>
+                        <label for="DIM_HOUR">Dim Time Start - Hour</label>
                         <select id="DIM_HOUR" name="DIM_HOUR">
                             {% for hour in range(24) %}
                                 <option value="{{ hour }}" {% if hour == DIM_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
                             {% endfor %}
                         </select>
-                        <label for="DIM_MINUTE">Minute:</label>
+                        <label for="DIM_MINUTE">Minute</label>
                         <select id="DIM_MINUTE" name="DIM_MINUTE">
-                            {% for minute in range(0, 60, 5) %}
-                                <option value="{{ minute }}" {% if minute == DIM_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
-                            {% endfor %}
+                            <option value="00" {% if 00 == DIM_TIME_START.minute %}selected{% endif %}>00</option>
+                            <option value="15" {% if 15 == DIM_TIME_START.minute %}selected{% endif %}>15</option>
+                            <option value="30" {% if 30 == DIM_TIME_START.minute %}selected{% endif %}>30</option>
+                            <option value="45" {% if 45 == DIM_TIME_START.minute %}selected{% endif %}>45</option>
                         </select>
                     </div>
 
                     <input type="submit" name="update" value="Update">
+                    <br>
                     <input type="submit" name="refresh" value="Refresh">
                 </form>
                 {% if error_message %}

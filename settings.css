@@ -98,3 +98,36 @@ input[type="submit"]:hover {
         width: 100%;
     }
 }
+.tab-container {
+    width: 80%;
+    margin: 40px auto;
+  }
+  
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .tab {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .tab.active {
+    background-color: #ccc;
+  }
+  
+  .tab-content {
+    padding: 20px;
+  }
+  
+  .tab-pane {
+    display: none;
+  }
+  
+  .tab-pane.active {
+    display: block;
+  }

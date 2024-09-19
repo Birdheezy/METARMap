@@ -26,4 +26,4 @@
 #runs the refresh script every 5 min between 0700 and 2100
 */5 7-21 * * * sudo /home/pi/metar/bin/python3 refresh.py
 #runs lights off script at 22:05
-05 21 * * * /home/pi/lightsoff.sh
+05 21 * * * /home/pi/pixelsoff.py

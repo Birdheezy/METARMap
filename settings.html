@@ -1,122 +1,212 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
-    <link rel="stylesheet" type="text/css" href="/settings.css">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Settings</title>
+        <link rel="stylesheet" type="text/css" href="/settings.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome Link -->
+    </head>
+    
 <body>
     <div class="container">
         <h1>Settings</h1>
+        <!-- Display error message if any -->
         {% if error_message %}
             <p class="error">{{ error_message }}</p>
         {% endif %}
+
         <form method="post">
             <div class="form-group">
-                <label for="WIND_ANIMATION" title="Turn wind animation on or off">Wind Animation:</label>
+                <label>
+                    About these settings:
+                    <br/>
+                    After making changes, click "Save" to save the settings then "Refresh" to update the map.
+                </label>
+            </div>
+            <!-- Wind Animation Checkbox -->
+            <div class="form-group">
+                <label for="WIND_ANIMATION">
+                    Wind Animation: <i class="fas fa-info-circle" title="Turn wind animation on or off"></i>
+                </label>
                 <input type="checkbox" id="WIND_ANIMATION" name="WIND_ANIMATION" {% if WIND_ANIMATION %}checked{% endif %}>
             </div>
+            <!-- Lightning Animation Checkbox -->
             <div class="form-group">
-                <label for="LIGHTNING_ANIMATION" title="Turn lightning animation on or off">Lightning Animation:</label>
+                <label for="LIGHTNING_ANIMATION">
+                    Lightning Animation: <i class="fas fa-info-circle" title="Turn lightning animation on or off"></i>
+                </label>
                 <input type="checkbox" id="LIGHTNING_ANIMATION" name="LIGHTNING_ANIMATION" {% if LIGHTNING_ANIMATION %}checked{% endif %}>
             </div>
+        
+            <!-- Snow Animation Checkbox -->
             <div class="form-group">
-                <label for="SNOW_ANIMATION" title="Turn snow animation on or off">Snow Animation:</label>
+                <label for="SNOW_ANIMATION">
+                    Snow Animation: <i class="fas fa-info-circle" title="Turn snow animation on or off"></i>
+                </label>
                 <input type="checkbox" id="SNOW_ANIMATION" name="SNOW_ANIMATION" {% if SNOW_ANIMATION %}checked{% endif %}>
             </div>
+        
+            <!-- Activate Daytime Dimming Checkbox -->
             <div class="form-group">
-                <label for="ACTIVATE_DAYTIME_DIMMING" title="Turn LED dim time of day on or off">Activate Daytime Dimming:</label>
+                <label for="ACTIVATE_DAYTIME_DIMMING">
+                    Activate Daytime Dimming: <i class="fas fa-info-circle" title="Turn LED dim time of day on or off"></i>
+                </label>
                 <input type="checkbox" id="ACTIVATE_DAYTIME_DIMMING" name="ACTIVATE_DAYTIME_DIMMING" {% if ACTIVATE_DAYTIME_DIMMING %}checked{% endif %}>
             </div>
+        
+            <!-- Show Legend Checkbox -->
             <div class="form-group">
-                <label for="SHOW_LEGEND" title="Use LEDs to show legend of VFR, MVFR, IFR, and LIFR">Show Legend:</label>
+                <label for="SHOW_LEGEND">
+                    Show Legend: <i class="fas fa-info-circle" title="Use LEDs to show legend of VFR, MVFR, IFR, and LIFR"></i>
+                </label>
                 <input type="checkbox" id="SHOW_LEGEND" name="SHOW_LEGEND" {% if SHOW_LEGEND %}checked{% endif %}>
             </div>
+        
+            <!-- Snow Fade Time Input -->
             <div class="form-group">
-                <label for="snow_fade_time" title="Snow animation speed">Snow Fade Time:</label>
-                <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}">
+                <label for="snow_fade_time">
+                    Snow Fade Time: <i class="fas fa-info-circle" title="Snow animation speed"></i>
+                </label>
+                <input type="text" id="snow_fade_time" name="snow_fade_time" value="{{ snow_fade_time }}" placeholder="Value in Seconds">
             </div>
+        
+            <!-- LED Brightness Input -->
             <div class="form-group">
-                <label for="LED_BRIGHTNESS" title="Default/daytime brightness. Value between 0 and 1">LED Brightness:</label>
-                <input type="text" id="LED_BRIGHTNESS" name="LED_BRIGHTNESS" value="{{ LED_BRIGHTNESS }}">
+                <label for="LED_BRIGHTNESS">
+                    LED Brightness: <i class="fas fa-info-circle" title="Default/daytime brightness. Value between 0 and 1"></i>
+                </label>
+                <input type="text" id="LED_BRIGHTNESS" name="LED_BRIGHTNESS" value="{{ LED_BRIGHTNESS }}" placeholder="Value between 0 and 1">
             </div>
+        
+            <!-- Location Input -->
             <div class="form-group">
-                <label for="LOCATION" title="Major city location. Visit https://astral.readthedocs.io/en/latest/index.html, scroll down to 'cities' to find the closest one to you">Location:</label>
-                <input type="text" id="LOCATION" name="LOCATION" value="{{ LOCATION }}">
+                <label for="LOCATION">
+                    Location: <i class="fas fa-info-circle" title="Major city location. Visit https://astral.readthedocs.io/en/latest/index.html, scroll down to 'cities' to find the closest one to you"></i>
+                </label>
+                <input type="text" id="LOCATION" name="LOCATION" value="{{ LOCATION }}" placeholder="e.g., New York">
             </div>
+        
+            <!-- LED Count Input -->
             <div class="form-group">
-                <label for="LED_COUNT" title="Set to the number of LEDs in your installation">LED Count:</label>
-                <input type="text" id="LED_COUNT" name="LED_COUNT" value="{{ LED_COUNT }}">
+                <label for="LED_COUNT">
+                    LED Count: <i class="fas fa-info-circle" title="Set to the number of LEDs in your installation"></i>
+                </label>
+                <input type="text" id="LED_COUNT" name="LED_COUNT" value="{{ LED_COUNT }}" placeholder="Total LED's installed">
             </div>
+        
+            <!-- Lightning Brightness Input -->
             <div class="form-group">
-                <label for="LIGHTNING_BRIGHTNESS" title="Brightness when flashing white for lightning animation">Lightning Brightness:</label>
-                <input type="text" id="LIGHTNING_BRIGHTNESS" name="LIGHTNING_BRIGHTNESS" value="{{ LIGHTNING_BRIGHTNESS }}">
+                <label for="LIGHTNING_BRIGHTNESS">
+                    Lightning Brightness: <i class="fas fa-info-circle" title="Brightness when flashing white for lightning animation"></i>
+                </label>
+                <input type="text" id="LIGHTNING_BRIGHTNESS" name="LIGHTNING_BRIGHTNESS" value="{{ LIGHTNING_BRIGHTNESS }}" placeholder="value between 0 and 1">
             </div>
+        
+            <!-- Dim Brightness Input -->
             <div class="form-group">
-                <label for="dim_brightness" title="Brightness the LEDs will dim to when doing the windy animation">Dim Brightness:</label>
-                <input type="text" id="dim_brightness" name="dim_brightness" value="{{ dim_brightness }}">
+                <label for="dim_brightness">
+                    Dim Brightness: <i class="fas fa-info-circle" title="Brightness the LEDs will dim to when doing the windy animation"></i>
+                </label>
+                <input type="text" id="dim_brightness" name="dim_brightness" value="{{ dim_brightness }}" placeholder="Value between 0 and 1">
             </div>
+        
+            <!-- Threshold Wind Speed Input -->
             <div class="form-group">
-                <label for="threshold_wind_speed" title="Airports with wind speed above this value will animate for wind">Threshold Wind Speed:</label>
-                <input type="text" id="threshold_wind_speed" name="threshold_wind_speed" value="{{ threshold_wind_speed }}">
+                <label for="threshold_wind_speed">
+                    Threshold Wind Speed: <i class="fas fa-info-circle" title="Airports with wind speed above this value will animate for wind"></i>
+                </label>
+                <input type="text" id="threshold_wind_speed" name="threshold_wind_speed" value="{{ threshold_wind_speed }}" placeholder="Speed in Knots">
             </div>
+        
+            <!-- Windy Animation Dim Pause Input -->
             <div class="form-group">
-                <label for="windy_animation_dim_pause" title="Time LED's should stay dim before going bright again">Windy Animation Dim Pause:</label>
-                <input type="text" id="windy_animation_dim_pause" name="windy_animation_dim_pause" value="{{ windy_animation_dim_pause }}">
+                <label for="windy_animation_dim_pause">
+                    Windy Animation Dim Pause: <i class="fas fa-info-circle" title="Time LEDs should stay dim before going bright again"></i>
+                </label>
+                <input type="text" id="windy_animation_dim_pause" name="windy_animation_dim_pause" value="{{ windy_animation_dim_pause }}" placeholder="Time in Seconds">
             </div>
+        
+            <!-- Fade Animation Speed Input -->
             <div class="form-group">
-                <label for="wind_fade_time" title="Speed of LED fade for wind animation">Fade Animation Speed</label>
-                <input type="text" id="wind_fade_time" name="wind_fade_time" value="{{ wind_fade_time }}">
+                <label for="wind_fade_time">
+                    Fade Animation Speed: <i class="fas fa-info-circle" title="How fast the LED's dim during the wind animation"></i>
+                </label>
+                <input type="text" id="wind_fade_time" name="wind_fade_time" value="{{ wind_fade_time }}" placeholder="Time in Seconds">
             </div>
+        
+            <!-- Animation Pause Input -->
             <div class="form-group">
-                <label for="animation_pause" title="Time between animation sets">Animation Pause:</label>
-                <input type="text" id="animation_pause" name="animation_pause" value="{{ animation_pause }}">
+                <label for="animation_pause">
+                    Animation Pause: <i class="fas fa-info-circle" title="Time between animation sets"></i>
+                </label>
+                <input type="text" id="animation_pause" name="animation_pause" value="{{ animation_pause }}" placeholder="Time in Seconds">
             </div>
+        
+            <!-- Lightning Flash Speed Input -->
             <div class="form-group">
-                <label for="lightning_flash_speed" title="Speed of LED blinking for lightning">Lightning Flash Speed:</label>
-                <input type="text" id="lightning_flash_speed" name="lightning_flash_speed" value="{{ lightning_flash_speed }}">
+                <label for="lightning_flash_speed">
+                    Lightning Flash Speed: <i class="fas fa-info-circle" title="Speed of LED blinking for lightning"></i>
+                </label>
+                <input type="text" id="lightning_flash_speed" name="lightning_flash_speed" value="{{ lightning_flash_speed }}" placeholder="Time in Seconds">
             </div>
+        
+            <!-- LED Brightness Dim Input -->
             <div class="form-group">
-                <label for="LED_BRIGHTNESS_DIM" title="LED brightness after sunset or DIM_TIME_START">LED Brightness Dim:</label>
-                <input type="text" id="LED_BRIGHTNESS_DIM" name="LED_BRIGHTNESS_DIM" value="{{ LED_BRIGHTNESS_DIM }}">
+                <label for="LED_BRIGHTNESS_DIM">
+                    LED Brightness Dim: <i class="fas fa-info-circle" title="LED brightness after sunset or DIM_TIME_START"></i>
+                </label>
+                <input type="text" id="LED_BRIGHTNESS_DIM" name="LED_BRIGHTNESS_DIM" value="{{ LED_BRIGHTNESS_DIM }}" placeholder="Value between 0 and 1">
             </div>
-
-            <!-- Bright Time Start -->
+        
+            <!-- Bright Time Start Hour and Minute Select -->
             <div class="form-group">
-                <label for="BRIGHT_HOUR">Bright Time Start - Hour:</label>
+                <label for="BRIGHT_HOUR">
+                    Bright Time Start - Hour: <i class="fas fa-info-circle" title="Start hour for bright LED mode"></i>
+                </label>
                 <select id="BRIGHT_HOUR" name="BRIGHT_HOUR">
                     {% for hour in range(24) %}
                         <option value="{{ hour }}" {% if hour == BRIGHT_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
                     {% endfor %}
                 </select>
-                <label for="BRIGHT_MINUTE">Minute:</label>
+                <label for="BRIGHT_MINUTE">
+                    Minute: <i class="fas fa-info-circle" title="Start minute for bright LED mode"></i>
+                </label>
                 <select id="BRIGHT_MINUTE" name="BRIGHT_MINUTE">
                     {% for minute in range(0, 60, 5) %}
                         <option value="{{ minute }}" {% if minute == BRIGHT_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
                     {% endfor %}
                 </select>
             </div>
-
-            <!-- Dim Time Start -->
+        
+            <!-- Dim Time Start Hour and Minute Select -->
             <div class="form-group">
-                <label for="DIM_HOUR">Dim Time Start - Hour:</label>
+                <label for="DIM_HOUR">
+                    Dim Time Start - Hour: <i class="fas fa-info-circle" title="Start hour for dim LED mode"></i>
+                </label>
                 <select id="DIM_HOUR" name="DIM_HOUR">
                     {% for hour in range(24) %}
                         <option value="{{ hour }}" {% if hour == DIM_TIME_START.hour %}selected{% endif %}>{{ hour }}</option>
                     {% endfor %}
                 </select>
-                <label for="DIM_MINUTE">Minute:</label>
+                <label for="DIM_MINUTE">
+                    Minute: <i class="fas fa-info-circle" title="Start minute for dim LED mode"></i>
+                </label>
                 <select id="DIM_MINUTE" name="DIM_MINUTE">
                     {% for minute in range(0, 60, 5) %}
                         <option value="{{ minute }}" {% if minute == DIM_TIME_START.minute %}selected{% endif %}>{{ minute }}</option>
                     {% endfor %}
                 </select>
             </div>
-
-            <input type="submit" name="update" value="Update">
-            <input type="submit" name="refresh" value="Refresh">
+        
+            <!-- Submit Buttons -->
+             <div class="button-group">
+                <input type="submit" name="update" value="Save">
+                <br/>
+                <input type="submit" name="refresh" value="Refresh Map">
+            </div>
         </form>
+        
     </div>
 </body>
 </html>

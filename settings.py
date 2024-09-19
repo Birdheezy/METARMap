@@ -20,15 +20,17 @@ def validate_float_field(field_name, min_value, max_value, default_value):
             error_message = f"{field_name.replace('_', ' ').title()} was too high. Please enter a value between {min_value} and {max_value}."
         else:
             error_message = None
-    except ValueError:
+    except ValueError as e:
         value = default_value
-        error_message = f"Invalid input for {field_name.replace('_', ' ').title()}. Please enter a number between {min_value} and {max_value}."
+        error_message = f"Invalid input for {field_name.replace('_', ' ').title()}: {e}. Please enter a number between {min_value} and {max_value}."
     return value, error_message
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     error_message = None
     if request.method == 'POST':
+        print(request.form)  # Debug statement to print form data
         if 'update' in request.form:
             led_brightness, error_message_led = validate_float_field('LED_BRIGHTNESS', 0.01, 1.0, config.LED_BRIGHTNESS)
             led_brightness_dim, error_message_dim = validate_float_field('LED_BRIGHTNESS_DIM', 0.01, 1.0, config.LED_BRIGHTNESS_DIM)
@@ -38,10 +40,9 @@ def index():
             error_message = " ".join([msg for msg in error_messages if msg])
 
             if not error_message:
-                # Retrieve other form values
+                # Retrieve other form values and update config file
                 led_count = request.form['LED_COUNT']
                 lightning_brightness = request.form['LIGHTNING_BRIGHTNESS']
-                dim_brightness = request.form['dim_brightness']
                 threshold_wind_speed = request.form['threshold_wind_speed']
                 windy_animation_dim_pause = request.form['windy_animation_dim_pause']
                 wind_fade_time = request.form['wind_fade_time']
@@ -102,8 +103,6 @@ def index():
                         new_lines.append(f"SNOW_ANIMATION = {snow_animation}\n")
                     elif line.startswith('ACTIVATE_DAYTIME_DIMMING'):
                         new_lines.append(f"ACTIVATE_DAYTIME_DIMMING = {activate_daytime_dimming}\n")
-                    elif line.startswith('LED_BRIGHTNESS_DIM'):
-                        new_lines.append(f"LED_BRIGHTNESS_DIM = {led_brightness_dim}\n")
                     elif line.startswith('SHOW_LEGEND'):
                         new_lines.append(f"SHOW_LEGEND = {show_legend}\n")
                     else:
@@ -112,14 +111,13 @@ def index():
                 # Write the updated settings back to the file
                 with open('config.py', 'w') as f:
                     f.writelines(new_lines)
+                    print("Config file updated")  # Confirm file update
 
-                # Reload the config module to reflect changes
-                importlib.reload(config)
         elif 'refresh' in request.form:
             # Execute the full command directly
             subprocess.run(["sudo", "/home/pi/metar/bin/python3", "metar.py"])
 
-    return render_template('settings.html', LED_BRIGHTNESS=config.LED_BRIGHTNESS, LOCATION=config.LOCATION, LED_COUNT=config.LED_COUNT, LIGHTNING_BRIGHTNESS=config.LIGHTNING_BRIGHTNESS, dim_brightness=config.dim_brightness, threshold_wind_speed=config.threshold_wind_speed, windy_animation_dim_pause=config.windy_animation_dim_pause, wind_fade_time=config.wind_fade_time, animation_pause=config.animation_pause, lightning_flash_speed=config.lightning_flash_speed, snow_fade_time=config.snow_fade_time, WIND_ANIMATION=config.WIND_ANIMATION, LIGHTNING_ANIMATION=config.LIGHTNING_ANIMATION, SNOW_ANIMATION=config.SNOW_ANIMATION, ACTIVATE_DAYTIME_DIMMING=config.ACTIVATE_DAYTIME_DIMMING, LED_BRIGHTNESS_DIM=config.LED_BRIGHTNESS_DIM, BRIGHT_TIME_START=config.BRIGHT_TIME_START, DIM_TIME_START=config.DIM_TIME_START, SHOW_LEGEND=config.SHOW_LEGEND, error_message=error_message)
+    return render_template('settings.html', error_message=error_message, LED_BRIGHTNESS=config.LED_BRIGHTNESS, LOCATION=config.LOCATION, LED_COUNT=config.LED_COUNT, LIGHTNING_BRIGHTNESS=config.LIGHTNING_BRIGHTNESS, dim_brightness=config.dim_brightness, threshold_wind_speed=config.threshold_wind_speed, windy_animation_dim_pause=config.windy_animation_dim_pause, wind_fade_time=config.wind_fade_time, animation_pause=config.animation_pause, lightning_flash_speed=config.lightning_flash_speed, snow_fade_time=config.snow_fade_time, WIND_ANIMATION=config.WIND_ANIMATION, LIGHTNING_ANIMATION=config.LIGHTNING_ANIMATION, SNOW_ANIMATION=config.SNOW_ANIMATION, ACTIVATE_DAYTIME_DIMMING=config.ACTIVATE_DAYTIME_DIMMING, LED_BRIGHTNESS_DIM=config.LED_BRIGHTNESS_DIM, BRIGHT_TIME_START=config.BRIGHT_TIME_START, DIM_TIME_START=config.DIM_TIME_START, SHOW_LEGEND=config.SHOW_LEGEND)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

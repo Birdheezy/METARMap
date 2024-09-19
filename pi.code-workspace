@@ -1,0 +1,8 @@
+{
+	"folders": [
+		{
+			"name": "SSH FS - metar_garage_tailscale",
+			"uri": "ssh://metar_garage_tailscale/home/pi"
+		}
+	]
+}

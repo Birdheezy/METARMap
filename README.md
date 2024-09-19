@@ -7,7 +7,7 @@ Raspberry Pi project to visualize flight conditions on a map using WS8211 LEDs a
 ## Detailed instructions
 
 I've created detailed instructions about the setup and parts used here: https://slingtsi.rueker.com/making-a-led-powered-metar-map-for-your-wall/
-
+I've recently added a front end settings interface. Install flask in the same venv as the neopixel library. I'll be updating the below instructions soon with an update for using venv for the neopixel library.
 ## Software Setup
 
 * Install [Raspberry Pi OS Lite](https://www.raspberrypi.org/software/) on SD card

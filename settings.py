@@ -115,7 +115,7 @@ def index():
 
         elif 'refresh' in request.form:
             # Execute the full command directly
-            subprocess.run(["sudo", "/home/pi/metar/bin/python3", "metar.py"])
+            subprocess.run(["sudo", "/home/pi/metar/bin/python3", "refresh.py"])
 
     return render_template('settings.html', error_message=error_message, LED_BRIGHTNESS=config.LED_BRIGHTNESS, LOCATION=config.LOCATION, LED_COUNT=config.LED_COUNT, LIGHTNING_BRIGHTNESS=config.LIGHTNING_BRIGHTNESS, dim_brightness=config.dim_brightness, threshold_wind_speed=config.threshold_wind_speed, windy_animation_dim_pause=config.windy_animation_dim_pause, wind_fade_time=config.wind_fade_time, animation_pause=config.animation_pause, lightning_flash_speed=config.lightning_flash_speed, snow_fade_time=config.snow_fade_time, WIND_ANIMATION=config.WIND_ANIMATION, LIGHTNING_ANIMATION=config.LIGHTNING_ANIMATION, SNOW_ANIMATION=config.SNOW_ANIMATION, ACTIVATE_DAYTIME_DIMMING=config.ACTIVATE_DAYTIME_DIMMING, LED_BRIGHTNESS_DIM=config.LED_BRIGHTNESS_DIM, BRIGHT_TIME_START=config.BRIGHT_TIME_START, DIM_TIME_START=config.DIM_TIME_START, SHOW_LEGEND=config.SHOW_LEGEND)
 
